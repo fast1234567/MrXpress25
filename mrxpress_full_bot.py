@@ -1,6 +1,7 @@
 import logging
 import sqlite3
-from telegram import Update, ChatPermissions, InlineKeyboardButton, InlineKeyboardMarkup
+import random
+from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackContext
 
 # Enable logging
@@ -21,12 +22,23 @@ cursor.execute("""
 conn.commit()
 
 # Bad words & filters
-bad_words = ["spam", "click here", "free", "deal", "girl", "boy", "fake", "scam", "weast", "dust", "no use"]
+bad_words = ["spam", "click here", "free", "deal", "girl", "boy", "fake", "scam", "weast", "dust", "no use", "usdt" "Doller", "buy", "sell", "usd"]
 auto_replies = {
     "how to join": "🔗 Use the group link to join.",
-    "admin": "👮‍♂️ Our admins will assist you shortly.",
-    "rules": "📜 Type /rules to read group rules."
+    "admin": "👮‍♂️ Admin is currently offline. 💬 They will reply to you as soon as they're online.",
+    "dm": "📩 Admin is offline now. 💬 Once online, they’ll respond immediately.",
+    "rules": "📜 Type /rules to read group rules.",
+    "hello": "👋 Hey there! 😊 How can I help you today?",
+    "what's up": "🤖 I'm just here to keep the group safe and fun! 🎉"
 }
+
+# Fun, random replies for the bot to be more interactive
+fun_replies = [
+    "😜 Let's get this party started!",
+    "😂 Haha, you're funny!",
+    "🤩 I can't stop laughing!",
+    "🎉 This is the most fun I've had all day!"
+]
 
 # Welcome message
 def welcome(update: Update, context: CallbackContext):
@@ -49,6 +61,7 @@ def filter_all(update: Update, context: CallbackContext):
 
     is_admin = any(admin.user.id == msg.from_user.id for admin in context.bot.get_chat_administrators(update.effective_chat.id))
 
+    # Handling filters for unwanted content
     if not is_admin:
         if msg.forward_date:
             msg.delete()
@@ -57,10 +70,15 @@ def filter_all(update: Update, context: CallbackContext):
         if any(word in text for word in bad_words):
             msg.delete()
 
+    # Responding to keywords
     for key in auto_replies:
         if key in text:
             msg.reply_text(auto_replies[key])
             break
+    
+    # Random fun replies
+    if "fun" in text or "joke" in text:
+        msg.reply_text(random.choice(fun_replies))
 
 # Warn
 def warn(update: Update, context: CallbackContext):
@@ -106,9 +124,24 @@ def unban(update: Update, context: CallbackContext):
 
 # Rules
 def rules(update: Update, context: CallbackContext):
-    update.message.reply_text("📌 Group Rules:\n1. No spam\n2. No promotions\n3. Respect everyone\n4. Admins have final say.")
+    rules_text = (
+        "📜 *XPRESS Airdrop Group Rules:*\n\n"
+        "1. 🚫 *Spam Strictly Not Allowed* – Don't flood the chat with repeated messages or unwanted links. Spam = instant delete or ban.\n"
+        "2. 📢 *No Promotions or Referral Links* – No self-promo, links to other groups, or referral links.\n"
+        "3. 🧑‍⚖️ *Respect Everyone* – No hate speech, abuse, or disrespect. Be kind.\n"
+        "4. 🛑 *No Forwarded Messages* – Forwarded messages will be auto-deleted.\n"
+        "5. 💸 *USDT Buy/Sell is BANNED* – Selling/buying USDT in group is not allowed.\n"
+        "   ➤ If you wish to sell, *contact admin via DM.*\n"
+        "   ➤ Public selling messages will be deleted & warned*\n"
+        "6. 🌐 *Language:* Only Tamil or English allowed.\n"
+        "7. 🔍 *DYOR (Do Your Own Research)* – Participate at your own risk.\n"
+        "8. 🛡 *Admins' Word is Final* – Admin decisions must be respected.\n\n"
+        "🧑‍💼 *Admins may be offline. Please wait — they will reply once online.*\n"
+        "📌 Type /rules anytime to see these rules again."
+    )
+    update.message.reply_text(rules_text, parse_mode="Markdown")
 
-# Admin-only start
+# Admin-only start with 2 buttons (Rules and Custom link)
 def start(update: Update, context: CallbackContext):
     user_id = update.message.from_user.id
     chat_id = update.effective_chat.id
@@ -121,14 +154,20 @@ def start(update: Update, context: CallbackContext):
             update.message.reply_text("❌ இந்த கட்டளையை admin-கள் மட்டுமே பயன்படுத்த முடியும்.")
             return
 
-        keyboard = [[InlineKeyboardButton("Rules", callback_data='rules')]]
+        keyboard = [
+            [InlineKeyboardButton("📜 Rules", callback_data='rules')],
+            [InlineKeyboardButton("👮‍♂️ Admim Chat", url="https://t.me/Xpress_Airdrop")]
+        ]
         reply_markup = InlineKeyboardMarkup(keyboard)
-        update.message.reply_text("🤖 MrXpress Bot ready to protect your group!", reply_markup=reply_markup)
+        update.message.reply_text(
+            "🤖 MrXpress Bot ready to protect your group!\n\nChoose an option below:",
+            reply_markup=reply_markup
+        )
 
     except Exception as e:
         update.message.reply_text(f"⚠️ பிழை ஏற்பட்டது: {e}")
 
-# Main
+# Main function to start the bot
 def main():
     updater = Updater(TOKEN, use_context=True)
     dp = updater.dispatcher
