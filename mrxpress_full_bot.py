@@ -22,7 +22,7 @@ cursor.execute("""
 conn.commit()
 
 # Bad words & filters
-bad_words = ["spam", "click here", "free", "deal", "girl", "boy", "fake", "scam", "weast", "dust", "no use", "usdt" "Doller", "buy", "sell", "usd"]
+bad_words = ["spam", "click here", "free", "deal", "girl", "boy", "fake", "scam", "weast", "dust", "no use", "usdt", "Doller", "buy", "sell", "usd"]
 auto_replies = {
     "how to join": "🔗 Use the group link to join.",
     "admin": "👮‍♂️ Admin is currently offline. 💬 They will reply to you as soon as they're online.",
@@ -122,24 +122,32 @@ def unban(update: Update, context: CallbackContext):
         context.bot.unban_chat_member(update.effective_chat.id, user.id)
         update.message.reply_text(f"✅ {user.full_name} has been unbanned.")
 
-# Rules
-def rules(update: Update, context: CallbackContext):
-    rules_text = (
-        "📜 *XPRESS Airdrop Group Rules:*\n\n"
-        "1. 🚫 *Spam Strictly Not Allowed* – Don't flood the chat with repeated messages or unwanted links. Spam = instant delete or ban.\n"
-        "2. 📢 *No Promotions or Referral Links* – No self-promo, links to other groups, or referral links.\n"
-        "3. 🧑‍⚖️ *Respect Everyone* – No hate speech, abuse, or disrespect. Be kind.\n"
-        "4. 🛑 *No Forwarded Messages* – Forwarded messages will be auto-deleted.\n"
-        "5. 💸 *USDT Buy/Sell is BANNED* – Selling/buying USDT in group is not allowed.\n"
-        "   ➤ If you wish to sell, *contact admin via DM.*\n"
-        "   ➤ Public selling messages will be deleted & warned*\n"
-        "6. 🌐 *Language:* Only Tamil or English allowed.\n"
-        "7. 🔍 *DYOR (Do Your Own Research)* – Participate at your own risk.\n"
-        "8. 🛡 *Admins' Word is Final* – Admin decisions must be respected.\n\n"
-        "🧑‍💼 *Admins may be offline. Please wait — they will reply once online.*\n"
-        "📌 Type /rules anytime to see these rules again."
-    )
-    update.message.reply_text(rules_text, parse_mode="Markdown")
+from telegram.ext import CallbackQueryHandler
+
+def button_callback(update: Update, context: CallbackContext):
+    query = update.callback_query
+    query.answer()
+
+    if query.data == "rules":
+        rules_text = (
+            "📜 *XPRESS Airdrop Group Rules:*\n\n"
+            "1. 🚫 *Spam Strictly Not Allowed* – Don't flood the chat with repeated messages or unwanted links. Spam = instant delete or ban.\n"
+            "2. 📢 *No Promotions or Referral Links* – No self-promo, links to other groups, or referral links.\n"
+            "3. 🧑‍⚖️ *Respect Everyone* – No hate speech, abuse, or disrespect. Be kind.\n"
+            "4. 🛑 *No Forwarded Messages* – Forwarded messages will be auto-deleted.\n"
+            "5. 💸 *USDT Buy/Sell is BANNED* – Selling/buying USDT in group is not allowed.\n"
+            "   ➤ If you wish to sell, *contact admin via DM.*\n"
+            "   ➤ Public selling messages will be deleted & warned*\n"
+            "6. 🌐 *Language:* Only Tamil or English allowed.\n"
+            "7. 🔍 *DYOR (Do Your Own Research)* – Participate at your own risk.\n"
+            "8. 🛡 *Admins' Word is Final* – Admin decisions must be respected.\n\n"
+            "🧑‍💼 *Admins may be offline. Please wait — they will reply once online.*\n"
+            "📌 Type /rules anytime to see these rules again."
+        )
+        query.edit_message_text(rules_text, parse_mode="Markdown")
+
+# Add to dispatcher
+dp.add_handler(CallbackQueryHandler(button_callback))
 
 # Admin-only start with 2 buttons (Rules and Custom link)
 def start(update: Update, context: CallbackContext):
@@ -156,7 +164,7 @@ def start(update: Update, context: CallbackContext):
 
         keyboard = [
             [InlineKeyboardButton("📜 Rules", callback_data='rules')],
-            [InlineKeyboardButton("👮‍♂️ Admim Chat", url="https://t.me/Xpress_Airdrop")]
+            [InlineKeyboardButton("👮‍♂️ Admin Chat", url="https://t.me/Xpress_Airdrop")]
         ]
         reply_markup = InlineKeyboardMarkup(keyboard)
         update.message.reply_text(
