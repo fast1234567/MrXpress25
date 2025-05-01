@@ -2,13 +2,20 @@ import logging
 import sqlite3
 import random
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
-from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackContext
+from telegram.ext import (
+    Updater,
+    CommandHandler,
+    MessageHandler,
+    Filters,
+    CallbackContext,
+    CallbackQueryHandler,
+)
 
 # Enable logging
 logging.basicConfig(level=logging.INFO)
 
 # Replace with your bot token
-TOKEN = "7929962828:AAHhacl36aCYMYo4kKWnIfqw63jUgkOyAsk"  # ⚠️ Use your own token
+TOKEN = "7929962828:AAHhacl36aCYMYo4kKWnIfqw63jUgkOyAsk"  # ⚠️ Replace with your own token
 
 # SQLite setup
 conn = sqlite3.connect("data.db", check_same_thread=False)
@@ -22,7 +29,11 @@ cursor.execute("""
 conn.commit()
 
 # Bad words & filters
-bad_words = ["spam", "click here", "free", "deal", "girl", "boy", "fake", "scam", "weast", "dust", "no use", "usdt", "Doller", "buy", "sell", "usd"]
+bad_words = [
+    "spam", "click here", "free", "deal", "girl", "boy", "fake", "scam", "weast",
+    "dust", "no use", "usdt", "Doller", "buy", "sell", "usd"
+]
+
 auto_replies = {
     "how to join": "🔗 Use the group link to join.",
     "admin": "👮‍♂️ Admin is currently offline. 💬 They will reply to you as soon as they're online.",
@@ -32,7 +43,6 @@ auto_replies = {
     "what's up": "🤖 I'm just here to keep the group safe and fun! 🎉"
 }
 
-# Fun, random replies for the bot to be more interactive
 fun_replies = [
     "😜 Let's get this party started!",
     "😂 Haha, you're funny!",
@@ -40,7 +50,7 @@ fun_replies = [
     "🎉 This is the most fun I've had all day!"
 ]
 
-# Welcome message
+# Welcome new members
 def welcome(update: Update, context: CallbackContext):
     for user in update.message.new_chat_members:
         update.message.reply_text(
@@ -49,7 +59,7 @@ def welcome(update: Update, context: CallbackContext):
             "நான் MrXpress! உங்களுக்கு என்ன உதவி வேண்டும்? 😎✨"
         )
 
-# Left message
+# Member left
 def left(update: Update, context: CallbackContext):
     user = update.message.left_chat_member
     update.message.reply_text(f"👋 {user.full_name} குழுவிலிருந்து விலகினார்.")
@@ -61,7 +71,6 @@ def filter_all(update: Update, context: CallbackContext):
 
     is_admin = any(admin.user.id == msg.from_user.id for admin in context.bot.get_chat_administrators(update.effective_chat.id))
 
-    # Handling filters for unwanted content
     if not is_admin:
         if msg.forward_date:
             msg.delete()
@@ -70,21 +79,20 @@ def filter_all(update: Update, context: CallbackContext):
         if any(word in text for word in bad_words):
             msg.delete()
 
-    # Responding to keywords
     for key in auto_replies:
         if key in text:
             msg.reply_text(auto_replies[key])
-            break
-    
-    # Random fun replies
+            return
+
     if "fun" in text or "joke" in text:
         msg.reply_text(random.choice(fun_replies))
 
-# Warn
+# Warn user
 def warn(update: Update, context: CallbackContext):
     if not update.message.reply_to_message:
         update.message.reply_text("⚠️ Reply to the user's message to warn.")
         return
+
     user = update.message.reply_to_message.from_user
     chat_id = update.effective_chat.id
     uid = user.id
@@ -97,7 +105,7 @@ def warn(update: Update, context: CallbackContext):
         cursor.execute("UPDATE users SET warns = ? WHERE id = ?", (warns, uid))
     else:
         warns = 1
-        cursor.execute("INSERT INTO users (id, warns) VALUES (?, ?) ", (uid, warns))
+        cursor.execute("INSERT INTO users (id, warns) VALUES (?, ?)", (uid, warns))
 
     conn.commit()
     update.message.reply_text(f"⚠️ {user.full_name} warned ({warns}/3)")
@@ -108,22 +116,21 @@ def warn(update: Update, context: CallbackContext):
         cursor.execute("DELETE FROM users WHERE id = ?", (uid,))
         conn.commit()
 
-# Ban
+# Ban user
 def ban(update: Update, context: CallbackContext):
     if update.message.reply_to_message:
         user = update.message.reply_to_message.from_user
         context.bot.kick_chat_member(update.effective_chat.id, user.id)
         update.message.reply_text(f"❌ {user.full_name} has been banned.")
 
-# Unban
+# Unban user
 def unban(update: Update, context: CallbackContext):
     if update.message.reply_to_message:
         user = update.message.reply_to_message.from_user
         context.bot.unban_chat_member(update.effective_chat.id, user.id)
         update.message.reply_text(f"✅ {user.full_name} has been unbanned.")
 
-from telegram.ext import CallbackQueryHandler
-
+# Inline button callback (Rules)
 def button_callback(update: Update, context: CallbackContext):
     query = update.callback_query
     query.answer()
@@ -131,25 +138,19 @@ def button_callback(update: Update, context: CallbackContext):
     if query.data == "rules":
         rules_text = (
             "📜 *XPRESS Airdrop Group Rules:*\n\n"
-            "1. 🚫 *Spam Strictly Not Allowed* – Don't flood the chat with repeated messages or unwanted links. Spam = instant delete or ban.\n"
-            "2. 📢 *No Promotions or Referral Links* – No self-promo, links to other groups, or referral links.\n"
-            "3. 🧑‍⚖️ *Respect Everyone* – No hate speech, abuse, or disrespect. Be kind.\n"
-            "4. 🛑 *No Forwarded Messages* – Forwarded messages will be auto-deleted.\n"
-            "5. 💸 *USDT Buy/Sell is BANNED* – Selling/buying USDT in group is not allowed.\n"
-            "   ➤ If you wish to sell, *contact admin via DM.*\n"
-            "   ➤ Public selling messages will be deleted & warned*\n"
-            "6. 🌐 *Language:* Only Tamil or English allowed.\n"
-            "7. 🔍 *DYOR (Do Your Own Research)* – Participate at your own risk.\n"
-            "8. 🛡 *Admins' Word is Final* – Admin decisions must be respected.\n\n"
-            "🧑‍💼 *Admins may be offline. Please wait — they will reply once online.*\n"
+            "1. 🚫 *Spam Strictly Not Allowed* – No unwanted links or repeated messages.\n"
+            "2. 📢 *No Promotions or Referral Links*\n"
+            "3. 🧑‍⚖️ *Respect Everyone*\n"
+            "4. 🛑 *No Forwarded Messages*\n"
+            "5. 💸 *USDT Buy/Sell is BANNED*\n"
+            "6. 🌐 *Language:* Only Tamil or English\n"
+            "7. 🔍 *DYOR (Do Your Own Research)*\n"
+            "8. 🛡 *Admins' Word is Final*\n\n"
             "📌 Type /rules anytime to see these rules again."
         )
         query.edit_message_text(rules_text, parse_mode="Markdown")
 
-# Add to dispatcher
-dp.add_handler(CallbackQueryHandler(button_callback))
-
-# Admin-only start with 2 buttons (Rules and Custom link)
+# /start command (admin only)
 def start(update: Update, context: CallbackContext):
     user_id = update.message.from_user.id
     chat_id = update.effective_chat.id
@@ -175,7 +176,14 @@ def start(update: Update, context: CallbackContext):
     except Exception as e:
         update.message.reply_text(f"⚠️ பிழை ஏற்பட்டது: {e}")
 
-# Main function to start the bot
+# /rules command (text)
+def rules(update: Update, context: CallbackContext):
+    update.message.reply_text(
+        "📜 Type /start and press 'Rules' button to see full group rules.",
+        quote=True
+    )
+
+# Main function
 def main():
     updater = Updater(TOKEN, use_context=True)
     dp = updater.dispatcher
@@ -185,6 +193,7 @@ def main():
     dp.add_handler(CommandHandler("warn", warn))
     dp.add_handler(CommandHandler("ban", ban))
     dp.add_handler(CommandHandler("unban", unban))
+    dp.add_handler(CallbackQueryHandler(button_callback))
 
     dp.add_handler(MessageHandler(Filters.status_update.new_chat_members, welcome))
     dp.add_handler(MessageHandler(Filters.status_update.left_chat_member, left))
