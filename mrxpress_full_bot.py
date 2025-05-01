@@ -21,7 +21,7 @@ cursor.execute("""
 conn.commit()
 
 # Bad words & filters
-bad_words = ["spam", "click here", "free", "deal", "girl", "boy"]
+bad_words = ["spam", "click here", "free", "deal", "girl", "boy" "fake", "scam","weast","dust","no use",]
 auto_replies = {
     "how to join": "🔗 Use the group link to join.",
     "admin": "👮‍♂️ Our admins will assist you shortly.",
