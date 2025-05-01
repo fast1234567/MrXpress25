@@ -91,8 +91,8 @@ def filter_all(update: Update, context: CallbackContext):
             "*5.* 💸 *USDT Buy/Sell is BANNED* : Selling/buying USDT in group is not allowed\n"
             "*6.* 🌐 *Language* : Only Tamil or English allowed\n"
             "*7.* 🔍 *DYOR (Do Your Own Research)* : Participate at your own risk\n"
-            "*8.* 🛡 *Admins' Word is Final* : Admin decisions must be respected\n\n"
-            "*9.* 🧑‍💼 *Admins may be offline. Please wait — they will reply once online*\n"
+            "*8.* 🛡 *Admins' Word is Final* : Admin decisions must be respected\n"
+            "*9.* 🧑‍💼 *Admins may be offline. Please wait — they will reply once online*\n\n"
             "📌 *Type /rules anytime to see these rules again.*"
                 )
                 msg.reply_text(rules_text, parse_mode="Markdown")
@@ -163,8 +163,8 @@ def button_callback(update: Update, context: CallbackContext):
             "*5.* 💸 *USDT Buy/Sell is BANNED* : Selling/buying USDT in group is not allowed\n"
             "*6.* 🌐 *Language* : Only Tamil or English allowed\n"
             "*7.* 🔍 *DYOR (Do Your Own Research)* : Participate at your own risk\n"
-            "*8.* 🛡 *Admins' Word is Final* : Admin decisions must be respected\n\n"
-            "*9.* 🧑‍💼 *Admins may be offline. Please wait — they will reply once online*\n"
+            "*8.* 🛡 *Admins' Word is Final* : Admin decisions must be respected\n"
+            "*9.* 🧑‍💼 *Admins may be offline. Please wait — they will reply once online*\n\n"
             "📌 *Type /rules anytime to see these rules again.*"
         )
         try:
@@ -209,8 +209,8 @@ def rules(update: Update, context: CallbackContext):
             "*5.* 💸 *USDT Buy/Sell is BANNED* : Selling/buying USDT in group is not allowed\n"
             "*6.* 🌐 *Language* : Only Tamil or English allowed\n"
             "*7.* 🔍 *DYOR (Do Your Own Research)* : Participate at your own risk\n"
-            "*8.* 🛡 *Admins' Word is Final* : Admin decisions must be respected\n\n"
-            "*9.* 🧑‍💼 *Admins may be offline. Please wait — they will reply once online*\n"
+            "*8.* 🛡 *Admins' Word is Final* : Admin decisions must be respected\n"
+            "*9.* 🧑‍💼 *Admins may be offline. Please wait — they will reply once online*\n\n"
             "📌 *Type /rules anytime to see these rules again.*"
     )
     update.message.reply_text(rules_text, parse_mode="Markdown")
