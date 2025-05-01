@@ -205,16 +205,19 @@ def start(update: Update, context: CallbackContext):
 # /rules command (text)
 def rules(update: Update, context: CallbackContext):
     rules_text = (
-        "📜 *XPRESS Airdrop Group Rules:*\n\n"
-        "1. 🚫 *Spam Strictly Not Allowed* – No unwanted links or repeated messages.\n"
-        "2. 📢 *No Promotions or Referral Links*\n"
-        "3. 🧑‍⚖️ *Respect Everyone*\n"
-        "4. 🛑 *No Forwarded Messages*\n"
-        "5. 💸 *USDT Buy/Sell is BANNED*\n"
-        "6. 🌐 *Language:* Only Tamil or English\n"
-        "7. 🔍 *DYOR (Do Your Own Research)*\n"
-        "8. 🛡 *Admins' Word is Final*\n\n"
-        "📌 Type /rules anytime to see these rules again."
+            "📜 *XPRESS AIRDROP GROUP RULS :*\n\n"
+            "1. 🚫 *Spam Strictly Not Allowed* : Don't flood the chat with repeated messages or unwanted links. Spam = instant delete or ban.\n"
+            "2. 📢 *No Promotions or Referral Links* : No self-promo, links to other groups, or referral links.\n"
+            "3. 🧑‍⚖️ *Respect Everyone* : No hate speech, abuse, or disrespect. Be kind.\n"
+            "4. 🛑 *No Forwarded Messages* : Forwarded messages will be auto-deleted.\n"
+            "5. 💸 *USDT Buy/Sell is BANNED* : Selling/buying USDT in group is not allowed.\n"
+            "   ➤ If you wish to sell, *contact admin via DM.*\n"
+            "   ➤ Public selling messages will be deleted & warned*\n"
+            "6. 🌐 *Language* : Only Tamil or English allowed.\n"
+            "7. 🔍 *DYOR (Do Your Own Research)* : Participate at your own risk.\n"
+            "8. 🛡 *Admins' Word is Final* : Admin decisions must be respected.\n\n"
+            "9. 🧑‍💼 *Admins may be offline. Please wait — they will reply once online.*\n"
+            "📌 Type /rules anytime to see these rules again."
     )
     update.message.reply_text(rules_text, parse_mode="Markdown")
 
