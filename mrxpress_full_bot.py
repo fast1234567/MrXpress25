@@ -84,16 +84,16 @@ def filter_all(update: Update, context: CallbackContext):
             if key == "rules":
                 rules_text = (
             "📜 *XPRESS AIRDROP GROUP RULS :*\n\n"
-            "1. 🚫 *Spam Strictly Not Allowed* : Don't flood the chat with repeated messages or unwanted links. Spam = instant delete or ban.\n"
-            "2. 📢 *No Promotions or Referral Links* : No self-promo, links to other groups, or referral links.\n"
-            "3. 🧑‍⚖️ *Respect Everyone* : No hate speech, abuse, or disrespect. Be kind.\n"
-            "4. 🛑 *No Forwarded Messages* : Forwarded messages will be auto-deleted.\n"
-            "5. 💸 *USDT Buy/Sell is BANNED* : Selling/buying USDT in group is not allowed.\n"
-            "6. 🌐 *Language* : Only Tamil or English allowed.\n"
-            "7. 🔍 *DYOR (Do Your Own Research)* : Participate at your own risk.\n"
-            "8. 🛡 *Admins' Word is Final* : Admin decisions must be respected.\n\n"
-            "9. 🧑‍💼 *Admins may be offline. Please wait — they will reply once online.*\n"
-            "📌 Type /rules anytime to see these rules again."
+            "*1.* 🚫 *Spam Strictly Not Allowed* : Don't flood the chat with repeated messages or unwanted links\n"
+            "*2.* 📢 *No Promotions or Referral Links* : No self-promo, links to other groups, or referral links\n"
+            "*3.* 🧑‍⚖️ *Respect Everyone* : No hate speech, abuse, or disrespect. Be kind\n"
+            "*4.* 🛑 *No Forwarded Messages* : Forwarded messages will be auto-deleted\n"
+            "*5.* 💸 *USDT Buy/Sell is BANNED* : Selling/buying USDT in group is not allowed\n"
+            "*6.* 🌐 *Language* : Only Tamil or English allowed\n"
+            "*7.* 🔍 *DYOR (Do Your Own Research)* : Participate at your own risk\n"
+            "*8.* 🛡 *Admins' Word is Final* : Admin decisions must be respected\n\n"
+            "*9.* 🧑‍💼 *Admins may be offline. Please wait — they will reply once online*\n"
+            "📌 *Type /rules anytime to see these rules again.*"
                 )
                 msg.reply_text(rules_text, parse_mode="Markdown")
             else:
@@ -156,16 +156,16 @@ def button_callback(update: Update, context: CallbackContext):
     if query.data == "rules":
         rules_text = (
             "📜 *XPRESS AIRDROP GROUP RULS :*\n\n"
-            "1. 🚫 *Spam Strictly Not Allowed* : Don't flood the chat with repeated messages or unwanted links. Spam = instant delete or ban.\n"
-            "2. 📢 *No Promotions or Referral Links* : No self-promo, links to other groups, or referral links.\n"
-            "3. 🧑‍⚖️ *Respect Everyone* : No hate speech, abuse, or disrespect. Be kind.\n"
-            "4. 🛑 *No Forwarded Messages* : Forwarded messages will be auto-deleted.\n"
-            "5. 💸 *USDT Buy/Sell is BANNED* : Selling/buying USDT in group is not allowed.\n"
-            "6. 🌐 *Language* : Only Tamil or English allowed.\n"
-            "7. 🔍 *DYOR (Do Your Own Research)* : Participate at your own risk.\n"
-            "8. 🛡 *Admins' Word is Final* : Admin decisions must be respected.\n\n"
-            "9. 🧑‍💼 *Admins may be offline. Please wait — they will reply once online.*\n"
-            "📌 Type /rules anytime to see these rules again."
+            "*1.* 🚫 *Spam Strictly Not Allowed* : Don't flood the chat with repeated messages or unwanted links\n"
+            "*2.* 📢 *No Promotions or Referral Links* : No self-promo, links to other groups, or referral links\n"
+            "*3.* 🧑‍⚖️ *Respect Everyone* : No hate speech, abuse, or disrespect. Be kind\n"
+            "*4.* 🛑 *No Forwarded Messages* : Forwarded messages will be auto-deleted\n"
+            "*5.* 💸 *USDT Buy/Sell is BANNED* : Selling/buying USDT in group is not allowed\n"
+            "*6.* 🌐 *Language* : Only Tamil or English allowed\n"
+            "*7.* 🔍 *DYOR (Do Your Own Research)* : Participate at your own risk\n"
+            "*8.* 🛡 *Admins' Word is Final* : Admin decisions must be respected\n\n"
+            "*9.* 🧑‍💼 *Admins may be offline. Please wait — they will reply once online*\n"
+            "📌 *Type /rules anytime to see these rules again.*"
         )
         try:
             query.edit_message_text(rules_text, parse_mode="Markdown")
@@ -202,16 +202,16 @@ def start(update: Update, context: CallbackContext):
 def rules(update: Update, context: CallbackContext):
     rules_text = (
             "📜 *XPRESS AIRDROP GROUP RULS :*\n\n"
-            "1. 🚫 *Spam Strictly Not Allowed* : Don't flood the chat with repeated messages or unwanted links. Spam = instant delete or ban.\n"
-            "2. 📢 *No Promotions or Referral Links* : No self-promo, links to other groups, or referral links.\n"
-            "3. 🧑‍⚖️ *Respect Everyone* : No hate speech, abuse, or disrespect. Be kind.\n"
-            "4. 🛑 *No Forwarded Messages* : Forwarded messages will be auto-deleted.\n"
-            "5. 💸 *USDT Buy/Sell is BANNED* : Selling/buying USDT in group is not allowed.\n"
-            "6. 🌐 *Language* : Only Tamil or English allowed.\n"
-            "7. 🔍 *DYOR (Do Your Own Research)* : Participate at your own risk.\n"
-            "8. 🛡 *Admins' Word is Final* : Admin decisions must be respected.\n\n"
-            "9. 🧑‍💼 *Admins may be offline. Please wait — they will reply once online.*\n"
-            "📌 Type /rules anytime to see these rules again."
+            "*1.* 🚫 *Spam Strictly Not Allowed* : Don't flood the chat with repeated messages or unwanted links\n"
+            "*2.* 📢 *No Promotions or Referral Links* : No self-promo, links to other groups, or referral links\n"
+            "*3.* 🧑‍⚖️ *Respect Everyone* : No hate speech, abuse, or disrespect. Be kind\n"
+            "*4.* 🛑 *No Forwarded Messages* : Forwarded messages will be auto-deleted\n"
+            "*5.* 💸 *USDT Buy/Sell is BANNED* : Selling/buying USDT in group is not allowed\n"
+            "*6.* 🌐 *Language* : Only Tamil or English allowed\n"
+            "*7.* 🔍 *DYOR (Do Your Own Research)* : Participate at your own risk\n"
+            "*8.* 🛡 *Admins' Word is Final* : Admin decisions must be respected\n\n"
+            "*9.* 🧑‍💼 *Admins may be offline. Please wait — they will reply once online*\n"
+            "📌 *Type /rules anytime to see these rules again.*"
     )
     update.message.reply_text(rules_text, parse_mode="Markdown")
 
