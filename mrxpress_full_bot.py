@@ -1,4 +1,4 @@
-from telegram import Update, ChatPermissions
+from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup, ChatPermissions
 from telegram.ext import Updater, MessageHandler, Filters, CommandHandler, CallbackContext
 import logging
 
@@ -18,7 +18,8 @@ filters = {
 auto_replies = {
     "how to join": "🔗 Use the group link to join.",
     "admin": "👮‍♂️ Our admins will assist you shortly.",
-    "rules": "📜 Type /rules to read group rules."
+    "rules": "📜 Type /rules to read group rules.",
+    "subscriber": "📌 Please subscribe to our channel for updates."
 }
 
 spam_and_bad_words = ["spam", "click here", "free money", "offer", "deal", "join now", "fake", "scam", "waste", "girl", "boy"]
@@ -31,6 +32,11 @@ def welcome(update: Update, context: CallbackContext):
             "💥 XPRESS குழுவிற்கு வரவேற்கிறோம்! 💥\n\n"
             "நான் MrXpress! உங்களுக்கு என்ன உதவி வேண்டும்? 😎✨"
         )
+
+# 🏃‍♂️ Left message
+def left(update: Update, context: CallbackContext):
+    for user in update.message.left_chat_members:
+        update.message.reply_text(f"❌ {user.full_name} குழுவிலிருந்து விலகி விட்டது.")
 
 # 🚫 Filter all messages for non-admins
 def filter_all(update: Update, context: CallbackContext):
@@ -162,6 +168,7 @@ def main():
     dp.add_handler(CommandHandler("delfilter", del_filter))
 
     dp.add_handler(MessageHandler(Filters.status_update.new_chat_members, welcome))
+    dp.add_handler(MessageHandler(Filters.status_update.left_chat_members, left))
     dp.add_handler(MessageHandler(Filters.text & ~Filters.command, filter_all))
 
     updater.start_polling()
