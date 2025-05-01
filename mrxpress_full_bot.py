@@ -7,7 +7,7 @@ from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, Callb
 logging.basicConfig(level=logging.INFO)
 
 # Replace with your bot token
-TOKEN = "7929962828:AAHhacl36aCYMYo4kKWnIfqw63jUgkOyAsk"
+TOKEN = "YOUR_BOT_TOKEN_HERE"  # ⚠️ Use your own token
 
 # SQLite setup
 conn = sqlite3.connect("data.db", check_same_thread=False)
@@ -21,7 +21,7 @@ cursor.execute("""
 conn.commit()
 
 # Bad words & filters
-bad_words = ["spam", "click here", "free", "deal", "girl", "boy" "fake", "scam","weast","dust","no use",]
+bad_words = ["spam", "click here", "free", "deal", "girl", "boy", "fake", "scam", "weast", "dust", "no use"]
 auto_replies = {
     "how to join": "🔗 Use the group link to join.",
     "admin": "👮‍♂️ Our admins will assist you shortly.",
@@ -108,11 +108,25 @@ def unban(update: Update, context: CallbackContext):
 def rules(update: Update, context: CallbackContext):
     update.message.reply_text("📌 Group Rules:\n1. No spam\n2. No promotions\n3. Respect everyone\n4. Admins have final say.")
 
-# Start + Menu
+# Admin-only start
 def start(update: Update, context: CallbackContext):
-    keyboard = [[InlineKeyboardButton("Rules", callback_data='rules')]]
-    reply_markup = InlineKeyboardMarkup(keyboard)
-    update.message.reply_text("🤖 MrXpress Bot ready to protect your group!", reply_markup=reply_markup)
+    user_id = update.message.from_user.id
+    chat_id = update.effective_chat.id
+
+    try:
+        admins = context.bot.get_chat_administrators(chat_id)
+        is_admin = any(admin.user.id == user_id for admin in admins)
+
+        if not is_admin:
+            update.message.reply_text("❌ இந்த கட்டளையை admin-கள் மட்டுமே பயன்படுத்த முடியும்.")
+            return
+
+        keyboard = [[InlineKeyboardButton("Rules", callback_data='rules')]]
+        reply_markup = InlineKeyboardMarkup(keyboard)
+        update.message.reply_text("🤖 MrXpress Bot ready to protect your group!", reply_markup=reply_markup)
+
+    except Exception as e:
+        update.message.reply_text(f"⚠️ பிழை ஏற்பட்டது: {e}")
 
 # Main
 def main():
